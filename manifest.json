@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "Globus — WhatsApp bridge",
-  "version": "0.1.0",
-  "description": "Reads WhatsApp Web messages into your Globus vault so Globus + GlobusAgents can see them. Read-only Phase 1A; no automated sending.",
-  "permissions": ["storage", "alarms"],
+  "name": "Globus — Teams & WhatsApp bridge",
+  "version": "0.3.7",
+  "description": "Reads WhatsApp Web + Microsoft Teams (personal, teams.live.com) messages into your Globus vault so Globus + GlobusAgents can see them. Read-only DOM scraping. Includes an active chat-list cycler so capture isn't tab-foreground-dependent.",
+  "permissions": ["storage", "alarms", "scripting", "activeTab"],
   "host_permissions": [
     "https://web.whatsapp.com/*",
+    "https://teams.live.com/*",
     "https://buildwithsumit.com/*"
   ],
   "background": {
@@ -16,11 +17,25 @@
       "matches": ["https://web.whatsapp.com/*"],
       "js": ["content.js"],
       "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://teams.live.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["page-bridge.js"],
+      "matches": [
+        "https://web.whatsapp.com/*",
+        "https://teams.live.com/*"
+      ]
     }
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Globus WhatsApp bridge",
+    "default_title": "Globus Teams & WhatsApp bridge",
     "default_icon": {
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png",

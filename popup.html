@@ -2,14 +2,16 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Globus WhatsApp bridge</title>
+  <title>Globus Teams & WhatsApp bridge</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
            font-size: 13px; color: #2a1a08; background: #fff7f0; margin: 0;
-           padding: 14px 16px; width: 320px; }
+           padding: 14px 16px; width: 340px; }
     h2 { margin: 0 0 .3rem; font-size: 15px; }
+    h3 { margin: 6px 0 4px; font-size: 12px; text-transform: uppercase;
+         letter-spacing: .05em; color: #7a655a; }
     .muted { color: #7a655a; font-size: 12px; }
-    .row { display: flex; justify-content: space-between; margin: .35rem 0; }
+    .row { display: flex; justify-content: space-between; margin: .25rem 0; }
     .pill { display: inline-block; padding: 2px 8px; border-radius: 10px;
             font-size: 11px; font-weight: 600; }
     .pill.ok { background: #d6f0c8; color: #1f5a0a; }
@@ -26,6 +28,8 @@
     .err { color: #8a1a1a; font-size: 11px; margin-top: .3rem; }
     hr { border: 0; border-top: 1px solid #ead8c4; margin: 12px 0; }
     a { color: #c7714b; }
+    .source-block { background: #fff; border: 1px solid #ead8c4;
+                    border-radius: 8px; padding: 8px 10px; margin: 8px 0; }
   </style>
 </head>
 <body>
@@ -33,30 +37,50 @@
     <img src="icons/icon-48.png" width="34" height="34" alt="Build With Sumit">
     <div>
       <div style="font-weight:700;font-size:14px;line-height:1.2">Build With <span style="color:#c7714b">Sumit</span></div>
-      <div class="muted" style="font-size:11px;letter-spacing:.04em;text-transform:uppercase">Globus · WhatsApp bridge</div>
+      <div class="muted" style="font-size:11px;letter-spacing:.04em;text-transform:uppercase">Globus · Teams &amp; WhatsApp bridge</div>
     </div>
   </div>
-  <div class="muted">Read-only Phase 1A. Sends messages to your Globus vault.</div>
+  <div class="muted">Read-only DOM mirror. Sends messages to your Globus vault.</div>
 
   <hr>
 
-  <div class="row"><strong>Status</strong> <span id="statusPill" class="pill warn">checking…</span></div>
+  <div class="row"><strong>Pairing status</strong> <span id="statusPill" class="pill warn">checking…</span></div>
   <div class="row muted"><span>Member</span><span id="memberLine">—</span></div>
-  <div class="row muted"><span>Queued in browser</span><span id="queuedLine">—</span></div>
-  <div class="row muted"><span>Uploaded this session</span><span id="sentLine">—</span></div>
-  <div class="row muted"><span>Last upload</span><span id="lastLine">—</span></div>
-  <div class="err" id="errLine"></div>
+
+  <div class="source-block">
+    <h3>WhatsApp</h3>
+    <div class="row muted"><span>Queued</span><span id="waQueued">—</span></div>
+    <div class="row muted"><span>Uploaded (session)</span><span id="waSent">—</span></div>
+    <div class="row muted"><span>Last upload</span><span id="waLast">—</span></div>
+    <div class="err" id="waErr"></div>
+  </div>
+
+  <div class="source-block">
+    <h3>Microsoft Teams</h3>
+    <div class="row muted"><span>Queued</span><span id="teamsQueued">—</span></div>
+    <div class="row muted"><span>Uploaded (session)</span><span id="teamsSent">—</span></div>
+    <div class="row muted"><span>Last upload</span><span id="teamsLast">—</span></div>
+    <div class="err" id="teamsErr"></div>
+  </div>
 
   <hr>
 
   <div><strong>Pairing token</strong></div>
   <div class="muted" style="margin: .3rem 0 .4rem">
     Get yours at <a href="https://buildwithsumit.com/members/whatsapp" target="_blank">buildwithsumit.com/members/whatsapp</a>
-    and paste here.
+    and paste here. One token covers both WhatsApp and Teams.
   </div>
-  <textarea id="tokenInput" rows="3" placeholder="paste your Globus WhatsApp token here"></textarea>
+  <textarea id="tokenInput" rows="3" placeholder="paste your Globus pairing token here"></textarea>
   <button id="saveBtn">Save token</button>
   <button id="flushBtn" class="ghost">Flush now</button>
+
+  <hr>
+  <div class="muted" style="margin-bottom:.4rem">
+    <strong>Debug:</strong> if a scraper isn't picking up messages right,
+    open the page (Teams or WhatsApp) and click below to send the rendered
+    DOM to the server for inspection.
+  </div>
+  <button id="uploadSourceBtn" class="ghost">Send page source for debug</button>
 
   <script src="popup.js"></script>
 </body>
